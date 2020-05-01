@@ -30,34 +30,3 @@ Create chart name and version as used by the chart label.
 {{- define "web3-assets.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
-
-{{/*
-Common labels
-*/}}
-{{- define "web3-assets.labels" -}}
-helm.sh/chart: {{ include "web3-assets.chart" . }}
-{{ include "web3-assets.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
-Selector labels
-*/}}
-{{- define "web3-assets.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "web3-assets.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "web3-assets.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (include "web3-assets.fullname" .) .Values.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
-{{- end -}}
-{{- end -}}

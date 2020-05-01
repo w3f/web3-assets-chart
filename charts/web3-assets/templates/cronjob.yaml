@@ -1,0 +1,44 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: hello
+spec:
+  schedule: "0 20 * * 1-5"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: sync drive
+            image: "{{ .Values.rclone.image.repository }}:{{ .Values.rclone.image.version }}"
+            args: ["rclone" "copy" "drive:" "/assets"]
+            volumeMounts:
+            - name: config-volume
+              mountPath: /root/.config/rclone/rclone.conf
+            - name: data-volume
+              mountPath: /assets
+          restartPolicy: OnFailure
+
+{{ if eq .Values.environment "ci" }}
+          volumes:
+          - name: config-volume
+            emptyDir: {}
+          - name: data-volume
+            emptyDir: {}
+{{ else }}
+          volumeClaimTemplates:
+          - metadata:
+              name: config-volume
+            spec:
+              accessModes: [ "ReadWriteOnce" ]
+              resources:
+                requests:
+                  storage: 1Gi
+          - metadata:
+              name: data-volume
+            spec:
+              accessModes: [ "ReadWriteOnce" ]
+              resources:
+                requests:
+                  storage: 100Gi
+{{ end }}

@@ -4,10 +4,15 @@ RUN set -ex \
     && apt-get clean \
     && apt-get update \
     && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends apt-utils apt-transport-https ca-certificates expect
+    && apt-get install -y --no-install-recommends apt-utils apt-transport-https ca-certificates git
 
 COPY rclone /usr/bin/
-RUN chown root:root /usr/bin/rclone \
-    && chmod 755 /usr/bin/rclone
+COPY sync.sh sync.sh
 
-COPY scripts scripts
+RUN chown root:root /usr/bin/rclone \
+    && chmod 755 /usr/bin/rclone \
+    && mkdir /assets \
+    && mkdir /repo
+
+
+CMD sync.sh

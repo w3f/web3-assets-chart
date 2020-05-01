@@ -1,0 +1,25 @@
+environment: ci
+
+replicaCount: 1
+
+rclone:
+  image:
+    repository: web3f/assets-share
+    version: v0.0.1
+    pullPolicy: IfNotPresent
+  config:
+
+serviceAccount:
+  create: true
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources: {}
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
