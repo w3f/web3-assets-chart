@@ -9,7 +9,7 @@ jobs:
       - setup_remote_docker
       - run:
           command: |
-            /scripts/build-image.sh web3f/matrix-recorder .
+            /scripts/build-image.sh web3f/assets .
   chartLint:
     docker:
       - image: web3f/ci-commons:v2.0.1
@@ -18,11 +18,11 @@ jobs:
       - run:
           description: helm lint
           command: |
-            helm lint ./charts/matrix-recorder
+            helm lint ./charts/assets
       - run:
           description: helm template
           command: |
-            helm template ./charts/matrix-recorder
+            helm template ./charts/assets
   integrationTests:
     docker:
       - image: web3f/ci-commons:v2.0.1
@@ -40,7 +40,7 @@ jobs:
       - setup_remote_docker
       - run:
           command: |
-            /scripts/publish-image.sh web3f/matrix-recorder
+            /scripts/publish-image.sh web3f/assets
   publishChart:
     docker:
       - image: web3f/ci-commons:v2.0.1
@@ -48,7 +48,7 @@ jobs:
       - checkout
       - run:
           command: |
-            /scripts/publish-chart.sh web3f/matrix-recorder
+            /scripts/publish-chart.sh web3f/assets
   deploy:
     docker:
       - image: web3f/ci-commons:v2.0.1

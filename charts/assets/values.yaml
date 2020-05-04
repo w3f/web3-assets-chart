@@ -1,13 +1,13 @@
-environment: ci
-
+environment: production
 replicaCount: 1
 
+image:
+  repository: web3f/assets-share
+  version: v0.0.1
+  pullPolicy: IfNotPresent
+
 rclone:
-  image:
-    repository: web3f/assets-share
-    version: v0.0.1
-    pullPolicy: IfNotPresent
-  config:
+  config: "a2xzZGpsYWpkcw=="
 
 serviceAccount:
   create: true
@@ -16,7 +16,7 @@ service:
   type: ClusterIP
   port: 80
 
-resources: {}
+resources:
   limits:
     cpu: 100m
     memory: 128Mi

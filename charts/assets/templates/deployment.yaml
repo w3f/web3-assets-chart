@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "assets.fullname" . }}
+  labels:
+    {{- include "assets.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "assets.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "assets.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "assets.serviceAccountName" . }}
+      initContainers:
+        - name: {{ .Chart.Name }}-init
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+          - name: config-volume
+            mountPath: /root/.config/rclone/rclone.conf
+          - name: assets-data-volume
+            mountPath: /assets
+          command: ['sh', '-c', "rclone sync --progress drive: /assets"]
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+          - name: config-volume
+            mountPath: /root/.config/rclone/rclone.conf
+          - name: assets-data-volume
+            mountPath: /assets
+          command: ['sh', '-c', "rclone sync --progress drive: /assets"]
+      volumes:
+      - name: config-volume
+        secret:
+          secretName: {{ include "assets.fullname" . }}-config
+      - name: assets-data-volume
+{{ if eq .Values.environment "ci" }}
+        emptyDir: {}
+{{ else }}
+        gcePersistentDisk:
+          pdName: assets-data-volume
+          fsType: ext4
+{{ end }}

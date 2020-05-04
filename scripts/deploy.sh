@@ -10,4 +10,4 @@ EOF
 
 cat ${VALUES_FILE}
 
-/scripts/deploy.sh -t helm -c engineering -a "web3-assets w3f/web3-assets -f ${VALUES_FILE}"
+/scripts/deploy.sh -t helm -c engineering -a "assets w3f/assets --namespace=assets -f ${VALUES_FILE}"
