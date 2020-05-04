@@ -2,12 +2,12 @@ environment: production
 replicaCount: 1
 
 image:
-  repository: web3f/assets-share
+  repository: web3f/assets
   version: v0.0.1
   pullPolicy: IfNotPresent
 
 rclone:
-  config: "a2xzZGpsYWpkcw=="
+  config:
 
 serviceAccount:
   create: true
