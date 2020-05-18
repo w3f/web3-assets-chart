@@ -1,0 +1,36 @@
+#!/bin/bash
+
+source /scripts/common.sh
+source /scripts/bootstrap-helm.sh
+set -ex
+
+
+run_tests() {
+  echo Running tests...
+  wait_pod_ready matrix-recorder-0 default 3/3
+}
+
+teardown() {
+  helm delete matrix-recorder
+}
+
+main(){
+  if [ -z "$KEEP_W3F_MATRIX_REC" ]; then
+      trap teardown EXIT
+  fi
+  echo Installing...
+  helm install\
+  --set environment="ci"\
+  --set rclone.config.driveName="${DRIVE_NAME}"\
+  --set rclone.config.scope="${DRIVE_SCOPE}"\
+  --set rclone.config.rootFolderID="${ROOT_FOLDER_ID}"\
+  --set rclone.config.token="${TOKEN}"\
+  --set rclone.config.token="${GITHUB_BOT_TOKEN}"\
+  assets ./charts/assets"
+
+  run_tests
+
+}
+
+main
+set +x
