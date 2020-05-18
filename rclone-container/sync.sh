@@ -6,8 +6,8 @@ echo scope = $DRIVE_NAME.$DRIVE_SCOPE >> /root/.config/rclone/rclone.conf
 echo root_folder_id = $ROOT_FOLDER_ID >> /root/.config/rclone/rclone.conf
 echo token = $DRIVE_TOKEN >> /root/.config/rclone/rclone.conf
 
-assets_dir="${ASSETS_DIRECTORY:-assets}"
-repo_dir="${REPO_DIRECTORY:-repo}"
+assets_dir="${ASSETS_DIRECTORY:-/assets}"
+repo_dir="${REPO_DIRECTORY:-/repo}"
 selector="${PUBLISH_SELECTOR:-Public}"
 
 mkdir -p $repo_dir
