@@ -9,7 +9,8 @@ jobs:
       - setup_remote_docker
       - run:
           command: |
-            /scripts/build-image.sh web3f/assets .
+            set -ex
+            /scripts/build-image.sh web3f/assets ./rclone-container
   chartLint:
     docker:
       - image: web3f/ci-commons:v2.1.4
