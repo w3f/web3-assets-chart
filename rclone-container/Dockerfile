@@ -14,4 +14,4 @@ RUN chown root:root /usr/bin/rclone \
     && mkdir /assets \
     && mkdir /repo
 
-CMD sync.sh
+CMD ./sync.sh
