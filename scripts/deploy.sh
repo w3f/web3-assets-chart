@@ -1,13 +1,9 @@
 #!/bin/sh
-
 set -ex
-cat > $VALUES_FILE <<EOF
-environment: production
-rclone:
-  config: |
-    $RECORDER_CONFIG
-EOF
-
-cat ${VALUES_FILE}
-
-/scripts/deploy.sh -t helm -c engineering -a "assets w3f/assets --namespace=assets -f ${VALUES_FILE}"
+/scripts/deploy.sh -t helm -c engineering -a "\
+ --set rclone.config.driveName=$DRIVE_NAME\
+ --set rclone.config.scope=$DRIVE_SCOPE\
+ --set rclone.config.rootFolderID=$ROOT_FOLDER_ID\
+ --set rclone.config.token=$TOKEN\
+ --set rclone.config.token=$GITHUB_BOT_TOKEN\
+ assets --namespace=assets w3f/assets"

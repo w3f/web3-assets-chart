@@ -8,6 +8,11 @@ image:
 
 rclone:
   config:
+    driveName:
+    scope:
+    rootFolderID:
+    token:
+    github:
 
 serviceAccount:
   create: true

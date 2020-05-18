@@ -1,7 +1,14 @@
 #!/bin/bash
+mkdir -p /root/.config/rclone/
+echo [$DRIVE_NAME] > /root/.config/rclone/rclone.conf
+echo type = $DRIVE_NAME >> /root/.config/rclone/rclone.conf
+echo scope = $DRIVE_NAME.$DRIVE_SCOPE >> /root/.config/rclone/rclone.conf
+echo root_folder_id = $ROOT_FOLDER_ID >> /root/.config/rclone/rclone.conf
+echo token = $DRIVE_TOKEN >> /root/.config/rclone/rclone.conf
+
 assets_dir="${ASSETS_DIRECTORY:-assets}"
 repo_dir="${REPO_DIRECTORY:-repo}"
-selector="${PUBLISH_SELECTOR:-Publish}"
+selector="${PUBLISH_SELECTOR:-Public}"
 
 mkdir -p $repo_dir
 mkdir -p $assets_dir
@@ -18,48 +25,49 @@ init_directory(){
   fi
 
   echo Sync with drive
-  rclone sync --progress drive: $assets_dir  
+  rclone sync --progress drive: $assets_dir
 }
 
 sync_files(){
   echo Selecting files
-  cd $assets_dir
-  path_list=($(find . -type f | grep "$selector" ))
-  for path in "${path_list[@]}"
+  OIFS="$IFS"
+  IFS=$'\n'
+  for path in $(find $assets_dir -type f | grep "$selector" )
   do
-    src="${path:2}"
-    trg="../$repo_dir/$(dirname "${path:2}")/"
-    mkdir -p $trg
-    cp $src  "../$repo_dir/${path:2}" || true
+    printf "File to publish: %s\n" "$path"
+    trg="$repo_dir/$(dirname "${path}")/"
+    mkdir -p "$trg"
+    cp "$path" "$trg"
   done
 
+
   echo Checking for deleted files
-  cd ../$repo_dir
-  path_list=($(find . -type f | grep -v ".git" ))
-  for path in "${path_list[@]}"
+  for path in $(find $repo_dir -type f | grep -v ".git" )
   do
-    test_path="../$assets_dir/${path:2}"
-    if [ -f "$test_path" ]; then
-        echo "$test_path exist"
+    assetfile=${path#/repo}
+    echo Cheking for $path at: $assetfile
+    if [ -f $assetfile ]
+    then
+      echo $assetfile exists.
     else
-        echo "$test_path does not exist in assets, removing: $path"
-        rm $path || true
+      echo $assetfile removed, removing from repo $path
+      rm -f $path
     fi
   done
 
   echo Removing empty directories
-  find . -type d -empty -delete || true
-  cd ..
+  find $repo_dir -type d -empty -delete || true
 }
 
 sync_repo(){
   echo Sync repo
   cd $repo_dir
-  git config user.name w3fbot
+  git config --global user.name "w3fbot"
+  git config --global user.email "devops@web3.foundation"
   git add -A
   git commit -m "Auto sync"
   git status
-  git push -q https://${GITHUB_BOT_TOKEN}@github.com/web3-assets.git
+  git push -q https://${GITHUB_BOT_TOKEN}@github.com/w3f/web3-assets.git
 }
 
 init_directory

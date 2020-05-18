@@ -19,23 +19,38 @@ spec:
         {{- include "assets.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "assets.serviceAccountName" . }}
-      initContainers:
-        - name: {{ .Chart.Name }}-init
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          volumeMounts:
-          - name: config-volume
-            mountPath: /root/.config/rclone/rclone.conf
-          - name: assets-data-volume
-            mountPath: /assets
-          command: ['sh', '-c', "rclone sync --progress drive: /assets"]
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.version | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: DRIVE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "assets.fullname" . }}-config
+                  key: driveName
+            - name: DRIVE_SCOPE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "assets.fullname" . }}-config
+                  key: scope
+            - name: ROOT_FOLDER_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "assets.fullname" . }}-config
+                  key: rootFolderID
+            - name: DRIVE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "assets.fullname" . }}-config
+                  key: token
+            - name: GITHUB_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "assets.fullname" . }}-config
+                  key: github  
           volumeMounts:
-          - name: config-volume
-            mountPath: /root/.config/rclone/rclone.conf
           - name: assets-data-volume
             mountPath: /assets
           command: ['sh', '-c', "rclone sync --progress drive: /assets"]
@@ -47,7 +62,6 @@ spec:
 {{ if eq .Values.environment "ci" }}
         emptyDir: {}
 {{ else }}
-        gcePersistentDisk:
-          pdName: assets-data-volume
-          fsType: ext4
+        persistentVolumeClaim:
+          claimName: assets-data-volume
 {{ end }}

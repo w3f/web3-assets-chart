@@ -3,7 +3,7 @@ version: 2
 jobs:
   buildImage:
     docker:
-      - image: web3f/ci-commons:v2.0.1
+      - image: web3f/ci-commons:v2.1.4
     steps:
       - checkout
       - setup_remote_docker
@@ -12,7 +12,7 @@ jobs:
             /scripts/build-image.sh web3f/assets .
   chartLint:
     docker:
-      - image: web3f/ci-commons:v2.0.1
+      - image: web3f/ci-commons:v2.1.4
     steps:
       - checkout
       - run:
@@ -25,7 +25,7 @@ jobs:
             helm template ./charts/assets
   integrationTests:
     docker:
-      - image: web3f/ci-commons:v2.0.1
+      - image: web3f/ci-commons:v2.1.4
     steps:
       - checkout
       - setup_remote_docker
@@ -34,7 +34,7 @@ jobs:
             /scripts/integration-tests.sh
   publishImage:
     docker:
-      - image: web3f/ci-commons:v2.0.1
+      - image: web3f/ci-commons:v2.1.4
     steps:
       - checkout
       - setup_remote_docker
@@ -43,7 +43,7 @@ jobs:
             /scripts/publish-image.sh web3f/assets
   publishChart:
     docker:
-      - image: web3f/ci-commons:v2.0.1
+      - image: web3f/ci-commons:2.1.4
     steps:
       - checkout
       - run:
@@ -51,7 +51,7 @@ jobs:
             /scripts/publish-chart.sh web3f/assets
   deploy:
     docker:
-      - image: web3f/ci-commons:v2.0.1
+      - image: web3f/ci-commons:v2.1.4
     steps:
       - checkout
       - run:
