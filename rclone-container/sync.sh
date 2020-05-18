@@ -34,24 +34,24 @@ sync_files(){
   IFS=$'\n'
   for path in $(find $assets_dir -type f | grep "$selector" )
   do
-    printf "File to publish: %s\n" "$path"
-    trg="$repo_dir/$(dirname "${path}")/"
-    mkdir -p "$trg"
-    cp "$path" "$trg"
+  printf "File to publish: %s\n" "$path"
+  trg="$repo_dir/$(dirname "${path}")/"
+  mkdir -p "$trg"
+  cp "$path" "$trg"
   done
 
 
   echo Checking for deleted files
   for path in $(find $repo_dir -type f | grep -v ".git" )
   do
-    assetfile=${path#/repo}
+    assetfile="${path##repo}"
     echo Cheking for $path at: $assetfile
     if [ -f $assetfile ]
     then
       echo $assetfile exists.
     else
       echo $assetfile removed, removing from repo $path
-      rm -f $path
+      #rm -f $path
     fi
   done
 
