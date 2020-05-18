@@ -49,11 +49,10 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "assets.fullname" . }}-config
-                  key: github  
+                  key: github
           volumeMounts:
           - name: assets-data-volume
             mountPath: /assets
-          command: ['sh', '-c', "rclone sync --progress drive: /assets"]
       volumes:
       - name: config-volume
         secret:

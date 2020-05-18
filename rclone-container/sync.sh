@@ -67,7 +67,9 @@ sync_repo(){
   git add -A
   git commit -m "Auto sync"
   git status
-  git push -q https://${GITHUB_BOT_TOKEN}@github.com/w3f/web3-assets.git
+  if [ -z "$CI" ]; then
+      git push -q https://${GITHUB_BOT_TOKEN}@github.com/w3f/web3-assets.git
+  fi
 }
 
 init_directory
