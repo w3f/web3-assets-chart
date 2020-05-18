@@ -7,15 +7,15 @@ set -ex
 
 run_tests() {
   echo Running tests...
-  wait_pod_ready matrix-recorder-0 default 3/3
+  wait_pod_ready assets default 1/1
 }
 
 teardown() {
-  helm delete matrix-recorder
+  helm delete assets
 }
 
 main(){
-  if [ -z "$KEEP_W3F_MATRIX_REC" ]; then
+  if [ -z "$KEEP_W3F_ASSETS" ]; then
       trap teardown EXIT
   fi
   echo Installing...
