@@ -1,3 +1,8 @@
+{{ if eq .Environment.Name "production" }}
+environment: production
+{{ else }}
+environment: ci
+{{ end }}
 image:
   repository: web3f/assets
   version: v0.0.2
@@ -15,3 +20,19 @@ rclone:
 {{ end }}
     token: {{ env "ENCODED_TOKEN" | default "TOKEN" }}
     github: {{ env "GITHUB_BOT_TOKEN" | default "GITHUB_BOT_TOKEN" }}
+
+
+statefulset:
+  updateStrategy: RollingUpdate
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
