@@ -20,7 +20,7 @@ main(){
   fi
   ENCODED_TOKEN=$(echo -n "$TOKEN" | base64 -w0 );
   echo Installing...
-  helm install --set rclone.config.driveName="${DRIVE_NAME}" --set rclone.config.scope="${DRIVE_SCOPE}" --set rclone.config.rootFolderID="${ROOT_FOLDER_ID}" --set rclone.config.token="${ENCODED_TOKEN}" --set rclone.config.github="${GITHUB_BOT_TOKEN}" assets ./charts/assets
+  helm install --set rclone.config.driveName="${DRIVE_NAME}" --set rclone.config.scope="${DRIVE_SCOPE}" --set rclone.config.rootFolderID="1VBlL-00d-EA1xTkgQgFP0tmitg6qJKth" --set rclone.config.token="${ENCODED_TOKEN}" --set rclone.config.github="${GITHUB_BOT_TOKEN}" assets ./charts/assets
 
   run_tests
 
