@@ -1,0 +1,17 @@
+image:
+  repository: web3f/assets
+  version: v0.0.2
+  pullPolicy: IfNotPresent
+
+
+rclone:
+  config:
+    driveName: drive
+    scope: readonly
+{{ if eq .Environment.Name "production" }}
+    rootFolderID: "1VBlL-00d-EA1xTkgQgFP0tmitg6qJKth"
+{{ else }}
+    rootFolderID: {{ env "ROOT_FOLDER_ID" | default "ROOT_FOLDER_ID" }}
+{{ end }}
+    token: {{ env "ENCODED_TOKEN" | default "TOKEN" }}
+    github: {{ env "GITHUB_BOT_TOKEN" | default "GITHUB_BOT_TOKEN" }}

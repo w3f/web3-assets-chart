@@ -1,11 +1,22 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "assets.fullname" . }}
   labels:
     {{- include "assets.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 3
+  updateStrategy:
+    type: {{ .Values.statefulset.updateStrategy }}
+    {{- if (eq "Recreate" .Values.statefulset.updateStrategy) }}
+    rollingUpdate: null
+    {{- else }}
+    {{- if .Values.statefulset.rollingUpdatePartition }}
+    rollingUpdate:
+      partition: {{ .Values.statefulset.rollingUpdatePartition }}
+    {{- end }}
+    {{- end }}  
   selector:
     matchLabels:
       {{- include "assets.selectorLabels" . | nindent 6 }}
@@ -51,13 +62,6 @@ spec:
           - name: assets-data-volume
             mountPath: /assets
       volumes:
-      - name: config-volume
-        secret:
-          secretName: {{ include "assets.fullname" . }}-config
       - name: assets-data-volume
-{{ if eq .Values.environment "ci" }}
-        emptyDir: {}
-{{ else }}
         persistentVolumeClaim:
           claimName: assets-data-volume
-{{ end }}

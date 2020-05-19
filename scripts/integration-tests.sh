@@ -7,7 +7,7 @@ set -ex
 
 run_tests() {
   echo Running tests...
-  wait_pod_ready assets default 1/1
+  wait_pod_ready assets assets 1/1
 }
 
 teardown() {
@@ -20,7 +20,8 @@ main(){
   fi
   ENCODED_TOKEN=$(echo -n "$TOKEN" | base64 -w0 );
   echo Installing...
-  helm install --set rclone.config.driveName="${DRIVE_NAME}" --set rclone.config.scope="${DRIVE_SCOPE}" --set rclone.config.rootFolderID="1VBlL-00d-EA1xTkgQgFP0tmitg6qJKth" --set rclone.config.token="${ENCODED_TOKEN}" --set rclone.config.github="${GITHUB_BOT_TOKEN}" assets ./charts/assets
+  kubectl create namespace assets
+  /scripts/build-helmfile.sh
 
   run_tests
 
