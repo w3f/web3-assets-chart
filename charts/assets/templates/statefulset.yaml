@@ -16,10 +16,11 @@ spec:
     rollingUpdate:
       partition: {{ .Values.statefulset.rollingUpdatePartition }}
     {{- end }}
-    {{- end }}  
+    {{- end }}
   selector:
     matchLabels:
       {{- include "assets.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "assets.fullname" . }}    
   template:
     metadata:
     {{- with .Values.podAnnotations }}
