@@ -14,8 +14,6 @@ rclone:
     token:
     github:
 
-serviceAccount:
-  create: true
 
 service:
   type: ClusterIP
