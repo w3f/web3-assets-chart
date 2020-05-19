@@ -18,7 +18,6 @@ spec:
       labels:
         {{- include "assets.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ include "assets.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.version | default .Chart.AppVersion }}"
