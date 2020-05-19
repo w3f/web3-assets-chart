@@ -1,6 +1,6 @@
 #!/bin/sh
 set -ex
-ENCODED_TOKEN=$(echo -n "$TOKEN" | base64 -w0 );
+export ENCODED_TOKEN=$(echo -n "$TOKEN" | base64 -w0 );
 
 /scripts/deploy.sh -t helm -c engineering -a "\
  --set rclone.config.driveName=$DRIVE_NAME\
