@@ -20,7 +20,7 @@ spec:
   selector:
     matchLabels:
       {{- include "assets.selectorLabels" . | nindent 6 }}
-  serviceName: {{ include "assets.fullname" . }}    
+  serviceName: {{ include "assets.fullname" . }}
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -66,3 +66,27 @@ spec:
       - name: assets-data-volume
         persistentVolumeClaim:
           claimName: assets-data-volume
+
+{{ if eq .Values.environment "ci" }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: assets-data-volume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+{{ else }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: assets-data-volume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+{{ end }}
