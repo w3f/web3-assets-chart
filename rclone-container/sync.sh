@@ -51,7 +51,7 @@ sync_files(){
       echo $assetfile exists.
     else
       echo $assetfile removed, removing from repo $path
-      #rm -f $path
+      rm -f $path
     fi
   done
 
