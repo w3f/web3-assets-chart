@@ -3,7 +3,7 @@ replicaCount: 1
 
 image:
   repository: web3f/assets
-  version: v0.0.2
+  version: latest
   pullPolicy: IfNotPresent
 
 rclone:
