@@ -21,8 +21,6 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.version | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: DRIVE_NAME
               valueFrom:
