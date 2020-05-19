@@ -67,7 +67,7 @@ spec:
         persistentVolumeClaim:
           claimName: assets-data-volume
 ---
-apiVersion: v1
+apiVersion: apps/v1
 kind: volumeClaimTemplates
 metadata:
   name: assets-data-volume
