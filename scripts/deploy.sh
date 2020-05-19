@@ -5,5 +5,5 @@ set -ex
  --set rclone.config.scope=$DRIVE_SCOPE\
  --set rclone.config.rootFolderID=$ROOT_FOLDER_ID\
  --set rclone.config.token=$TOKEN\
- --set rclone.config.token=$GITHUB_BOT_TOKEN\
+ --set rclone.config.github=$GITHUB_BOT_TOKEN\
  assets --namespace=assets w3f/assets"
