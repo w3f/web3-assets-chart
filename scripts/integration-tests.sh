@@ -11,7 +11,7 @@ run_tests() {
 }
 
 teardown() {
-  helm delete assets
+  helm delete --namespace=assets assets
 }
 
 main(){
