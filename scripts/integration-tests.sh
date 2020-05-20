@@ -18,7 +18,6 @@ main(){
   if [ -z "$KEEP_W3F_ASSETS" ]; then
       trap teardown EXIT
   fi
-  export ENCODED_TOKEN=$(echo -n "$TOKEN" | base64 -w0 );
   echo Installing...
   kubectl create namespace assets
   /scripts/build-helmfile.sh
