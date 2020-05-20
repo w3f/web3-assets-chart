@@ -1,0 +1,42 @@
+{{ if eq .Environment.Name "production" }}
+environment: production
+{{ else }}
+environment: ci
+{{ end }}
+image:
+  repository: web3f/assets
+{{ if eq .Environment.Name "production" }}
+  version: {{ env "CIRCLE_TAG" }}
+{{ else }}
+  version: {{ env "CIRCLE_SHA1" | default "kind" }}
+{{ end }}
+  pullPolicy: IfNotPresent
+
+
+rclone:
+  config:
+    driveName: drive
+    scope: readonly
+{{ if eq .Environment.Name "production" }}
+    rootFolderID: "1VBlL-00d-EA1xTkgQgFP0tmitg6qJKth"
+{{ else }}
+    rootFolderID: {{ env "ROOT_FOLDER_ID" | default "ROOT_FOLDER_ID" }}
+{{ end }}
+    token: {{ env "TOKEN" | default "TOKEN" }}
+    github: {{ env "GITHUB_BOT_TOKEN" | default "GITHUB_BOT_TOKEN" }}
+
+
+statefulset:
+  updateStrategy: RollingUpdate
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
