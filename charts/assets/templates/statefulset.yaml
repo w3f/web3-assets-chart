@@ -7,16 +7,8 @@ metadata:
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: 3
-  updateStrategy:
-    type: {{ .Values.statefulset.updateStrategy }}
-    {{- if (eq "Recreate" .Values.statefulset.updateStrategy) }}
-    rollingUpdate: null
-    {{- else }}
-    {{- if .Values.statefulset.rollingUpdatePartition }}
-    rollingUpdate:
-      partition: {{ .Values.statefulset.rollingUpdatePartition }}
-    {{- end }}
-    {{- end }}
+  updateStrategy: 
+    type: RollingUpdate
   selector:
     matchLabels:
       {{- include "assets.selectorLabels" . | nindent 6 }}
