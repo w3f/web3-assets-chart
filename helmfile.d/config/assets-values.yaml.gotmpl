@@ -5,7 +5,11 @@ environment: ci
 {{ end }}
 image:
   repository: web3f/assets
-  version: v0.0.2
+{{ if eq .Environment.Name "production" }}
+  version: {{ env "CIRCLE_TAG" }}
+{{ else }}
+  version: {{ env "CIRCLE_SHA1" | default "kind" }}
+{{ end }}
   pullPolicy: IfNotPresent
 
 
