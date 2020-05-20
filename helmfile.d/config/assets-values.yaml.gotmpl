@@ -22,7 +22,7 @@ rclone:
 {{ else }}
     rootFolderID: {{ env "ROOT_FOLDER_ID" | default "ROOT_FOLDER_ID" }}
 {{ end }}
-    token: {{ env "ENCODED_TOKEN" | default "TOKEN" }}
+    token: {{ env "TOKEN" | default "TOKEN" }}
     github: {{ env "GITHUB_BOT_TOKEN" | default "GITHUB_BOT_TOKEN" }}
 
 
