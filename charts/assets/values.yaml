@@ -14,8 +14,6 @@ rclone:
     token:
     github:
 
-statefulset:
-  updateStrategy: RollingUpdate
 
 service:
   type: ClusterIP
